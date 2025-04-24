@@ -54,7 +54,7 @@
                                                         <td>{{ $transaction->created_at->format('H:i d/m/Y') }}</td>
 
                                                         <td>Server {{ $transaction->server }}</td>
-                                                        <td class="text-bold">{{ $transaction->account_name }}</td>
+                                                        <td class="text-bold">{{ $transaction->username }}</td>
                                                         <td class="text-bold">{{ $transaction->password }}</td>
                                                         <td class="amount text-danger">
                                                             -{{ number_format($transaction->price) }} VND</td>

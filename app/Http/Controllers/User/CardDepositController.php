@@ -49,7 +49,7 @@ class CardDepositController extends Controller
         if (!in_array($partnerWeb, ['thesieure.com', 'gachthe1s.com'])) {
             return redirect()
                 ->route('profile.deposit-card')
-                ->with('error', 'Website đối tác không hợp lệ!')
+                ->with('error', 'Hiện tại không hỗ trợ nạp thẻ')
                 ->withInput();
         }
 
