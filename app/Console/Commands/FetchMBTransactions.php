@@ -31,7 +31,9 @@ class FetchMBTransactions extends Command
         }
 
         $this->info('Tìm thấy ' . $bankAccounts->count() . ' tài khoản ngân hàng cần quét.');
+
         $apiUrl = 'https://my.sepay.vn/userapi/transactions/list';
+
         $totalProcessed = 0;
 
         foreach ($bankAccounts as $bankAccount) {
@@ -49,9 +51,9 @@ class FetchMBTransactions extends Command
                     'Authorization' => 'Bearer ' . $bankAccount->access_token,
                     'Content-Type' => 'application/json',
                 ])->get($apiUrl, [
-                            'account_number' => $bankAccount->account_number,
-                            'limit' => 10,
-                        ]);
+                    'account_number' => $bankAccount->account_number,
+                    'limit' => 10,
+                ]);
 
                 if ($response->successful()) {
                     $transactions = $response->json();
@@ -59,7 +61,7 @@ class FetchMBTransactions extends Command
                     $skippedCount = 0;
 
                     $this->info('Tìm thấy ' . count($transactions['transactions'] ?? []) . ' giao dịch.');
-                    // print_r($transactions['transactions']); debug
+
                     foreach ($transactions['transactions'] ?? [] as $transaction) {
                         // Sử dụng prefix từ cấu hình tài khoản ngân hàng
                         $prefix = $bankAccount->prefix ?? 'naptien';

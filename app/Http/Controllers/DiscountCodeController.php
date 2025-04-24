@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Console\Commands\FetchMBTransactions;
 use App\Models\Account;
 use App\Models\DiscountCode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Telegram\Bot\Api;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class DiscountCodeController extends Controller
 {
@@ -208,7 +212,31 @@ class DiscountCodeController extends Controller
         }
     }
 
-    public function confirmPayment(Request $request) {
-        Log::info('confirmPayment', $request->all());
+    public function confirmPayment(Request $request)
+    {
+        $telegram = new Api(config('services.telegram.bot_token'));
+
+        try {
+            Artisan::call('fetch:mb-transactions');
+
+            $telegram->sendMessage([
+                'chat_id' => 5572600385,
+                'text' => "Bạn vừa có giao dịch mới!\nTại shop: " .config('app.url'),
+            ]);
+        } catch (\Exception $e) {
+            $telegram->sendMessage([
+                'chat_id' => 5572600385,
+                'text' => 'Error fetching MB transactions: ' . $e->getMessage(),
+            ]);
+
+            Log::error('Error fetching MB transactions: ' . $e->getMessage());
+            return response()->json([
+                'success' => true,
+            ])->setStatusCode(500);
+        }
+
+        return response()->json([
+            'success' => true,
+        ])->setStatusCode(200);
     }
 }

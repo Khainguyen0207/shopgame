@@ -28,4 +28,4 @@ Route::post('/api/sepay-payment', [DiscountCodeController::class, 'confirmPaymen
 
 Route::get('/auto-bank-deposit', function () {
     Artisan::call('fetch:mb-transactions');
-}); // Bảo vệ route bằng middleware auth
+});
