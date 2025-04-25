@@ -220,7 +220,7 @@ class DiscountCodeController extends Controller
             Artisan::call('fetch:mb-transactions');
 
             $telegram->sendMessage([
-                'chat_id' => 5572600385,
+                'chat_id' => config('services.telegram.chat_id'),
                 'text' => "Bạn vừa có giao dịch mới!\nTại shop: " .config('app.url'),
             ]);
         } catch (\Exception $e) {

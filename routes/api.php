@@ -1,30 +1,32 @@
 <?php
 
+use App\Http\Middleware\VerifyWebMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\CardDepositController;
 use App\Http\Controllers\DiscountCodeController;
 use Illuminate\Support\Facades\Artisan;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+Route::middleware([
+    VerifyWebMiddleware::class,
+])->group(function () {
+    Route::post('sepay-payment', [DiscountCodeController::class, 'confirmPayment']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::get('user', function (Request $request) {
+        return response()->json([
+            'error' => false,
+            'message' => 'Success',
+            'data' => [
+                'user' => $request->user()
+            ]
+        ]);
+    });
 });
-Route::match(['GET', 'POST'],'/callback/card', [CardDepositController::class, 'handleCallback'])->name('callback.card');
+
+Route::match(['GET', 'POST'], '/callback/card', [CardDepositController::class, 'handleCallback'])->name('callback.card');
 
 // Discount code validation
 Route::post('/discount-codes/validate', [DiscountCodeController::class, 'validateCode']);
-Route::post('/api/sepay-payment', [DiscountCodeController::class, 'confirmPayment']);
 
 Route::get('/auto-bank-deposit', function () {
     Artisan::call('fetch:mb-transactions');
