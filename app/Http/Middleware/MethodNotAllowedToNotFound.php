@@ -12,7 +12,7 @@ class MethodNotAllowedToNotFound
         try {
             return $next($request);
         } catch (MethodNotAllowedHttpException $e) {
-            abort(404);
+            abort(404, 'MethodNotAllowedHttpException' . $e->getMessage());
         }
     }
 }
