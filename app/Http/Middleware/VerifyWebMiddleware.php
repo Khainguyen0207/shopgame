@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Telegram\Bot\Api;
 
@@ -21,13 +22,7 @@ class VerifyWebMiddleware
                 abort(404);
             }
         } catch (\Exception $e) {
-            $telegram = new Api(config('services.telegram.bot_token'));
-            $debugChatId = config('services.telegram.chat_id');
-
-            $telegram->sendMessage([
-                'chat_id' => $debugChatId,
-                'text' => $e->getMessage(),
-            ]);
+            Log::error($e->getMessage());
         }
 
         return $next($request);
