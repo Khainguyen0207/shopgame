@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('fetch:mb-transactions')->everyTenMinutes();
-        $schedule->command('fetch:mb-transactions')->everyMinute();
+        $schedule->command('app:confirm-cronjob')->everyMinute();
         $schedule->command('cache:send-access')->dailyAt('23:59');
     }
 
