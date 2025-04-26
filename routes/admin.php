@@ -1,11 +1,4 @@
 <?php
-/**
- * Copyright (c) 2025 FPT University
- *
- * @author    Phạm Hoàng Tuấn
- * @email     phamhoangtuanqn@gmail.com
- * @facebook  fb.com/phamhoangtuanqn
- */
 
 use App\Http\Controllers\Admin\GameAccountController;
 use App\Http\Controllers\Admin\GameCategoryController;
@@ -25,9 +18,10 @@ use App\Http\Controllers\Admin\LuckyWheelController;
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('index');
+
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
-        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit')->where('id', '[0-9]+');
+        Route::get('/edit/{id}', [UserController::class, 'show'])->name('show')->where('id', '[0-9]+');
         Route::put('/update/{id}', [UserController::class, 'update'])->name('update')->where('id', '[0-9]+');
         Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('destroy')->where('id', '[0-9]+');
     });

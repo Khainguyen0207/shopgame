@@ -35,6 +35,17 @@ class UserController extends Controller
         return view('admin.users.edit', compact('title', 'user', 'transactions'));
     }
 
+    public function show($id)
+    {
+        $title = 'Sửa người dùng #' . $id;
+        $user = User::findOrFail($id);
+        $transactions = MoneyTransaction::where('user_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.users.edit', compact('title', 'user', 'transactions'));
+    }
+
     public function update(Request $request, $id)
     {
         try {
