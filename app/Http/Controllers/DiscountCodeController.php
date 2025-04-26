@@ -239,9 +239,6 @@ class DiscountCodeController extends Controller
         return response()->json([
             'error' => true,
             'message' => 'Success payment confirmation',
-            'data' => [
-                $request->all()
-            ],
         ])->setStatusCode(200);
     }
 }
