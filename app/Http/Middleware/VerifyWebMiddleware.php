@@ -15,12 +15,8 @@ class VerifyWebMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        try {
-            if ($request->acceptsHtml()) {
-                abort(404);
-            }
-        } catch (\Exception $e) {
-            dd(123456789);
+        if ($request->acceptsHtml()) {
+            abort(404);
         }
 
         return $next($request);
