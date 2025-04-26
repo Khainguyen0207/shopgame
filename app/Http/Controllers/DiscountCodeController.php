@@ -232,12 +232,14 @@ class DiscountCodeController extends Controller
             Log::error('Error fetching MB transactions: ' . $e->getMessage());
             return response()->json([
                 'error' => true,
+                'success' => true,
                 'message' => $e->getMessage(),
             ])->setStatusCode(500);
         }
 
         return response()->json([
             'error' => true,
+            'success' => true,
             'message' => 'Success payment confirmation',
         ])->setStatusCode(200);
     }
