@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('fetch:mb-transactions')->everyTenMinutes();
-        // Câu lệnh chạy CRON TAB: php artisan fetch:mb-transactions
+        $schedule->command('cache:send-access')->dailyAt('23:59');
     }
 
     /**

@@ -33,8 +33,18 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
             if (! Cache::has('access')) {
                 Cache::set('access', [
-                    'ip' => request()->ip()
+                    request()->ip() => request()->userAgent()
                 ]);
+            } else {
+                $cachedData = Cache::get('access');
+
+                $newKey = request()->ip();
+                $newValue = request()->userAgent();
+
+                if (! isset($cachedData[$newKey])) {
+                    $cachedData[$newKey] = $newValue;
+                    Cache::set('access', $cachedData);
+                }
             }
 
             Route::middleware('api')
