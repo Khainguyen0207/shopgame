@@ -187,8 +187,10 @@ class ProfileController extends Controller
         // Ensure each bank account has a prefix
         foreach ($bankAccounts as $account) {
             if (empty($account->prefix)) {
-                $account->prefix = 'NAP' . $request->user()->id;
+                $account->prefix = 'NAP' . $request->user()->getKey();
             }
+
+            $account->prefix .= $request->user()->getKey();
         }
 
         return view('user.profile.deposit-atm', [

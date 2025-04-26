@@ -86,6 +86,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/responsive-fixes.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/mobile-menu.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/header-responsive.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/custom_theme.css') }}" />
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"

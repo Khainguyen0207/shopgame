@@ -37,7 +37,7 @@
                     <div class="detail__info-row">
                         <div class="detail__info-item">
                             <span class="detail__info-label">ĐĂNG KÝ:</span>
-                            <span class="detail__info-value">{{ $account->registration_type }}</span>
+                            <span class="detail__info-value">{{ $account->registration_type === 'TTT' ? 'Trắng thông tin' : $account->registration_type}}</span>
                         </div>
                     </div>
 

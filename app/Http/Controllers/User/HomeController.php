@@ -33,7 +33,10 @@ class HomeController extends Controller
             $category->soldCount = GameAccount::where('game_category_id', $category->id)
                 ->where('status', 'sold')
                 ->count();
-            $category->allAccount = GameAccount::where('game_category_id', $category->id)->count();
+            $category->allAccount = GameAccount::query()
+                    ->where('game_category_id', $category->id)
+                    ->where('status', 'available')
+                    ->count();
         }
 
         // Dịch vụ cày thuê

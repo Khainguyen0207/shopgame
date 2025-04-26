@@ -1,11 +1,3 @@
-{{-- /**
-* Copyright (c) 2025 FPT University
-*
-* @author Phạm Hoàng Tuấn
-* @email phamhoangtuanqn@gmail.com
-* @facebook fb.com/phamhoangtuanqn
-*/ --}}
-
 @extends('layouts.user.app')
 @section('title', 'Trang chủ')
 @section('content')
@@ -124,6 +116,12 @@
                     </div>
                     <p class="text text__transaction__item">TÀI KHOẢN</p>
                 </a>
+                <a href="https://zalo.me/0989060084" class="transaction__item">
+                    <div class="transaction__icon">
+                        <img src="{{ asset('assets/images/zalo.png') }}" alt="Dịch vụ" class="transaction__img"/>
+                    </div>
+                    <p class="text text__transaction__item">ZALO hỗ trợ</p>
+                </a>
             </div>
         </div>
     </section>
@@ -140,7 +138,7 @@
                         <img src="{{ $category->thumbnail }}" alt="{{ $category->name }}" class="category__img"/>
                         <h2 class="category__title">{{ $category->name }}</h2>
                         <div class="category__stats">
-                            <span class="badge">{{ number_format($category->allAccount) }} Tài khoản</span>
+                            <span class="badge">Chưa bán: {{ number_format($category->allAccount) }}</span>
                             <span class="badge">Đã bán: 212</span>
                         </div>
                         <p class="category__action">XEM CHI TIẾT</p>

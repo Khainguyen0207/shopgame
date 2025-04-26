@@ -62,6 +62,7 @@
                                         <p>3. Số tiền sẽ được cộng tự động vào tài khoản sau khi giao dịch hoàn tất</p>
                                     </div>
                                     <div class="notice-warning">CHÚ Ý: PHẢI ĐÚNG CÚ PHÁP NỘI DUNG CHUYỂN KHOẢN</div>
+                                    <div class="notice-warning">Số tiền sẽ được cộng ngay sau khi giao dịch hoàn tất vui lòng refresh trang để cập nhật số dư</div>
                                 </div>
 
                                 <div class="bank-accounts-container">
@@ -86,9 +87,13 @@
                                                                     <i class="far fa-copy"></i>
                                                                 </button>
                                                             </div>
-                                                            <div class="branch">
-                                                                <span class="label">Chi nhánh:</span>
-                                                                <span class="value">{{ $account->branch }}</span>
+                                                            <div class="account-number">
+                                                                <span class="label">Nội dung:</span>
+                                                                <span class="value">{{ $account->prefix }}</span>
+                                                                <button class="copy-btn"
+                                                                        data-clipboard-text="{{ $account->prefix }}">
+                                                                    <i class="far fa-copy"></i>
+                                                                </button>
                                                             </div>
                                                             @if ($account->note)
                                                                 <div class="note">

@@ -1,0 +1,17 @@
+.info-item__custom {
+    display: flex;
+    gap: 5px;
+    background-color: #2ff889;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+
+.px-2 {
+    padding-left: .5rem !important;
+    padding-right: .5rem !important;
+}
+
+.account-description {
+    border-top: 1px solid #ddd;
+    padding: 5px;
+}
