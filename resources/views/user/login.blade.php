@@ -31,7 +31,6 @@
                 @endif
                 <form method="POST" action="{{ route('login') }}" class="register-form">
                     @csrf
-
                     <div class="form-group">
                         <label for="username" class="form-label">Tên tài khoản hoặc Email</label>
                         <input id="username" type="text" class="form-input @error('username') is-invalid @enderror"

@@ -118,9 +118,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="bank-qr-code">
-                                                        <img src="https://qr.sepay.vn/img?bank={{ $account->bank_name }}&acc={{ $account->account_number }}&template=&amount=&des={{ $account->prefix . Auth::user()->id }}"
+                                                        <img src="https://qr.sepay.vn/img?bank={{ $account->bank_name }}&acc={{ $account->account_number }}&template=&amount=&des={{ $account->prefix    }}"
                                                             alt="QR Code">
-
                                                     </div>
                                                 </div>
                                             @endforeach
