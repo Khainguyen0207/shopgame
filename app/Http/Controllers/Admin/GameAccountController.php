@@ -45,23 +45,44 @@ class GameAccountController extends Controller
             DB::beginTransaction();
 
             $data = $request->except(['thumb', 'images']);
+            $uploadCloudinaryService = new UploadCloudinaryService();
+
+            $imagePaths = [];
+            $urlThumb = [];
 
             if ($request->hasFile('thumb')) {
-                $data['thumb'] = UploadHelper::upload($request->file('thumb'), self::UPLOAD_DIR . '/thumbnails');
+                $publicId = Str::random(20);
+                $urlThumb = [
+                    'url_image' => $request->thumb->store('public/images'),
+                    'public_id' => $publicId,
+                    'type' => 'thumb',
+                ];
+                $data['thumb'] = json_encode($urlThumb, true);
             }
 
             if ($request->hasFile('images')) {
-                $imagePaths = [];
+
                 foreach ($request->file('images') as $image) {
-                    $path = UploadHelper::upload($image, self::UPLOAD_DIR . '/images');
-                    $imagePaths[] = $path;
+                    $publicId = Str::random(20);
+                    $url = [
+                        'url_image' => $image->store('public/images'),
+                        'public_id' => $publicId,
+                        'type' => 'images',
+                    ];
+
+                    $imagePaths[] = $url;
                 }
-                $data['images'] = json_encode($imagePaths);
+
+
+                $data['images'] = json_encode($imagePaths, true);
             }
 
-            GameAccount::create($data);
+            $account = GameAccount::query()->create($data);
 
             DB::commit();
+
+            $uploadCloudinaryService->upload($urlThumb, $account);
+            $uploadCloudinaryService->upload($imagePaths, $account);
 
             return redirect()->route('admin.accounts.index')
                 ->with('success', 'Tài khoản game đã được tạo thành công.');
@@ -101,12 +122,12 @@ class GameAccountController extends Controller
                     }
                 }
                 $publicId = Str::random(20);
-                $url = array([
+                $url = [
                     'url_image' => $request->thumb->store('public/images'),
                     'public_id' => $publicId,
                     'type' => 'thumb',
-                ]);
-                $data['thumb'] = $publicId;
+                ];
+                $data['thumb'] = $url;
                 $uploadCloudinaryService->upload($url, $account);
             }
 
@@ -167,22 +188,40 @@ class GameAccountController extends Controller
         try {
             DB::beginTransaction();
 
+            $uploadCloudinaryService = new UploadCloudinaryService();
             // Delete thumbnail if exists
             if ($account->thumb) {
-                UploadHelper::deleteByUrl($account->thumb);
+                $publicId = Str::between($account->thumb, 'firefoxgame/', '.');
+
+                if (Storage::exists($account->thumb)) {
+                    Storage::delete($account->thumb);
+                } else {
+                    $uploadCloudinaryService->deleteAssetsByFolder([$publicId]);
+                }
             }
 
             // Delete additional images if exists
             if ($account->images) {
-                $images = json_decode($account->images, true);
-                foreach ($images as $image) {
-                    UploadHelper::deleteByUrl($image);
+                $oldImages = json_decode($account->images, true);
+                $publicIds = [];
+
+                foreach ($oldImages as $image) {
+                    if (Storage::exists($image['url_image'])) {
+                        Storage::delete($image['url_image']);
+                        continue;
+                    }
+
+                    $publicId = Str::between($image['url_image'], 'firefoxgame/', '.');
+                    $publicIds[] = $publicId;
+                }
+
+                if (count($publicIds) > 0) {
+                    $uploadCloudinaryService->deleteAssetsByFolder($publicIds);
                 }
             }
 
             // Delete the account record
             $account->delete();
-
             DB::commit();
 
             return response()->json(['success' => true]);

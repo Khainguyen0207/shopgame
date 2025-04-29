@@ -75,8 +75,17 @@
                                             </span>
                                         </td>
                                         <td>{{ $account->registration_type === 'TTT' ? 'TTT' : 'TTX' }}</td>
+                                        @php
+                                            $image = json_decode($account->thumb, true);
+                                            $imageUrl = \Illuminate\Support\Arr::get($image, 'url_image');
+                                            if (! $imageUrl) {
+                                                $image['url_image'] = $account->thumb;
+                                            } else {
+                                                $image['url_image'] = \Illuminate\Support\Facades\Storage::exists($image['url_image']) ? \Illuminate\Support\Facades\Storage::url($image['url_image']) : $image['url_image'];
+                                            }
+                                        @endphp
                                         <td>
-                                            <img src="{{ asset($account->thumb) }}" alt="{{ $account->account_name }}"
+                                            <img src="{{  $image['url_image'] }}" alt="image-preview"
                                                 class="img-thumbnail" style="max-width: 100px;">
                                         </td>
                                         <td>
