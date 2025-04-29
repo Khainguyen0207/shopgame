@@ -145,14 +145,18 @@
                                 </div>
                             </div>
                             <div class="col-lg-12 text-center">
-                                <img id="preview-thumb" src="{{ $account->thumb }}" alt="preview"
+                                @php
+                                    $image = json_decode($account->thumb, true);
+                                    $image['url_image'] = \Illuminate\Support\Facades\Storage::exists($image['url_image']) ? \Illuminate\Support\Facades\Storage::url($image['url_image']) : $image['url_image'];
+                                @endphp
+                                <img id="preview-thumb" src="{{ $image['url_image'] }}" alt="preview"
                                      class="mx-auto d-block mb-3 preview-thumb">
                                 <div id="preview-images" class="d-flex flex-wrap justify-content-center gap-3 mb-3">
                                     @if ($account->images)
                                         @foreach (json_decode($account->images, true) as $image)
                                             @php
-                                                $image['url_image'] = \Illuminate\Support\Facades\Storage::exists($image['url_image']) ? \Illuminate\Support\Facades\Storage::url($image['url_image']) : $image['url_image']
-                                             @endphp
+                                                $image['url_image'] = \Illuminate\Support\Facades\Storage::exists($image['url_image']) ? \Illuminate\Support\Facades\Storage::url($image['url_image']) : $image['url_image'];
+                                            @endphp
 
                                             <img src="{{ Arr::get($image, 'url_image') }}" alt="preview"
                                                  style="max-width: 200px; max-height: 200px;">

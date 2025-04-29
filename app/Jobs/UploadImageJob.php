@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Helpers\UploadHelper;
 use App\Models\GameAccount;
 use App\Services\UploadCloudinaryService;
 use Illuminate\Bus\Queueable;
@@ -70,6 +71,7 @@ class UploadImageJob implements ShouldQueue
                         ];
                     }
                     Storage::delete($urlImage);
+                    UploadHelper::deleteByUrl($urlImage);
                     Log::channel('upload_image')->info('Upload file success: ' . $secureUrl);
                 }
             }
