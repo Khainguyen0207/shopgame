@@ -79,8 +79,17 @@
                 @forelse($accounts as $account)
                     <div class="account-card">
                         <div class="account-media">
+                            @php
+                                $image = json_decode($account->thumb, true);
+                                $imageUrl = \Illuminate\Support\Arr::get($image, 'url_image');
+                                if (! $imageUrl) {
+                                    $image['url_image'] = $account->thumb;
+                                } else {
+                                    $image['url_image'] = \Illuminate\Support\Facades\Storage::exists($image['url_image']) ? \Illuminate\Support\Facades\Storage::url($image['url_image']) : $image['url_image'];
+                                }
+                            @endphp
                             <a href="{{ route('account.show', ['id' => $account->id]) }}">
-                                <img src="{{ $account->thumb }}" alt="Account Preview" class="account-img">
+                                <img src="{{ $image['url_image'] }}" alt="Account Preview" class="account-img">
                             </a>
                             <div class="account-code">Mã số: {{ $account->id }}</div>
                             <div class="account-price-top">ATM/VÍ ĐIỆN TỬ: {{ number_format($account->price) }}VND

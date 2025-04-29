@@ -15,11 +15,11 @@
                 </div>
             </div>
             @if (session('success'))
-                <x-alert-admin type="success" :message="session('success')" />
+                <x-alert-admin type="success" :message="session('success')"/>
             @endif
 
             @if (session('error'))
-                <x-alert-admin type="danger" :message="session('error')" />
+                <x-alert-admin type="danger" :message="session('error')"/>
             @endif
             <div class="card">
                 <div class="card-body">
@@ -27,7 +27,7 @@
                         <div class="search-set">
                             <div class="search-input">
                                 <a class="btn btn-searchset"><img src="{{ asset('assets/img/icons/search-white.svg') }}"
-                                        alt="img"></a>
+                                                                  alt="img"></a>
                             </div>
                         </div>
                     </div>
@@ -35,70 +35,71 @@
                     <div class="table-responsive">
                         <table class="table datanew">
                             <thead>
-                                <tr>
-                                    <th>
-                                        <label class="checkboxs">
-                                            <input type="checkbox" id="select-all">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </th>
-                                    <th>ID</th>
-                                    <th>Danh mục</th>
-                                    <th>Tên tài khoản</th>
-                                    <th>Giá tiền</th>
-                                    <th>Trạng thái</th>
-                                    <th>Loại</th>
-                                    <th>Ảnh đại diện</th>
-                                    <th>Thao tác</th>
-                                </tr>
+                            <tr>
+                                <th>
+                                    <label class="checkboxs">
+                                        <input type="checkbox" id="select-all">
+                                        <span class="checkmarks"></span>
+                                    </label>
+                                </th>
+                                <th>ID</th>
+                                <th>Danh mục</th>
+                                <th>Tên tài khoản</th>
+                                <th>Giá tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Loại</th>
+                                <th>Ảnh đại diện</th>
+                                <th>Thao tác</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach ($accounts as $key => $account)
-                                    <tr>
-                                        <td>
-                                            <label class="checkboxs">
-                                                <input type="checkbox">
-                                                <span class="checkmarks"></span>
-                                            </label>
-                                        </td>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>
-                                            <a
+                            @foreach ($accounts as $key => $account)
+                                <tr>
+                                    <td>
+                                        <label class="checkboxs">
+                                            <input type="checkbox">
+                                            <span class="checkmarks"></span>
+                                        </label>
+                                    </td>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>
+                                        <a
                                                 href="{{ route('admin.categories.edit', ['category' => $account->category->id]) }}">{{ $account->category->name }}</a>
-                                        </td>
-                                        <td class="text-bolds">{{ $account->username }}</td>
-                                        <td>{{ number_format($account->price) }} VNĐ</td>
-                                        <td>
+                                    </td>
+                                    <td class="text-bolds">{{ $account->username }}</td>
+                                    <td>{{ number_format($account->price) }} VNĐ</td>
+                                    <td>
                                             <span
-                                                class="badges {{ $account->status === 'available' ? 'bg-lightgreen' : 'bg-lightred' }}">
+                                                    class="badges {{ $account->status === 'available' ? 'bg-lightgreen' : 'bg-lightred' }}">
                                                 {{ $account->status === 'available' ? 'Chưa bán' : 'Đã bán' }}
                                             </span>
-                                        </td>
-                                        <td>{{ $account->registration_type === 'TTT' ? 'TTT' : 'TTX' }}</td>
-                                        @php
-                                            $image = json_decode($account->thumb, true);
-                                            $imageUrl = \Illuminate\Support\Arr::get($image, 'url_image');
-                                            if (! $imageUrl) {
-                                                $image['url_image'] = $account->thumb;
-                                            } else {
-                                                $image['url_image'] = \Illuminate\Support\Facades\Storage::exists($image['url_image']) ? \Illuminate\Support\Facades\Storage::url($image['url_image']) : $image['url_image'];
-                                            }
-                                        @endphp
-                                        <td>
-                                            <img src="{{  $image['url_image'] }}" alt="image-preview"
-                                                class="img-thumbnail" style="max-width: 100px;">
-                                        </td>
-                                        <td>
-                                            <a class="me-3" href="{{ route('admin.accounts.edit', $account->id) }}">
-                                                <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="img">
-                                            </a>
-                                            <a class="me-3 confirm-delete" href="javascript:void(0);" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal" data-id="{{ $account->id }}">
-                                                <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="img">
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                    </td>
+                                    <td>{{ $account->registration_type === 'TTT' ? 'TTT' : 'TTX' }}</td>
+
+                                    @php
+                                        $image = json_decode($account->thumb, true);
+                                        $imageUrl = \Illuminate\Support\Arr::get($image, 'url_image');
+                                        if (! $imageUrl) {
+                                            $image['url_image'] = $account->thumb;
+                                        } else {
+                                            $image['url_image'] = \Illuminate\Support\Facades\Storage::exists($image['url_image']) ? \Illuminate\Support\Facades\Storage::url($image['url_image']) : $image['url_image'];
+                                        }
+                                    @endphp
+                                    <td>
+                                        <img src="{{  $image['url_image'] }}" alt="image-preview"
+                                             class="img-thumbnail" style="max-width: 100px;">
+                                    </td>
+                                    <td>
+                                        <a class="me-3" href="{{ route('admin.accounts.edit', $account->id) }}">
+                                            <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="img">
+                                        </a>
+                                        <a class="me-3 confirm-delete" href="javascript:void(0);" data-bs-toggle="modal"
+                                           data-bs-target="#deleteModal" data-id="{{ $account->id }}">
+                                            <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="img">
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -108,29 +109,29 @@
     </div>
 
     <x-modal-confirm-delete
-        message="Bạn có chắc chắn muốn xóa tài khoản game này không? Tất cả dữ liệu có liên quan đến nó sẽ
-                    biến mất khỏi hệ thống!" />
+            message="Bạn có chắc chắn muốn xóa tài khoản game này không? Tất cả dữ liệu có liên quan đến nó sẽ
+                    biến mất khỏi hệ thống!"/>
 @endsection
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             let id;
 
             // Lưu ID dịch vụ khi click nút xóa
-            $('.confirm-delete').on('click', function() {
+            $('.confirm-delete').on('click', function () {
                 id = $(this).data('id');
             });
 
             // Xử lý sự kiện click nút xác nhận xóa
-            $('#confirmDelete').on('click', function() {
+            $('#confirmDelete').on('click', function () {
                 $.ajax({
                     url: '/admin/accounts/delete/' + id,
                     type: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}'
                     },
-                    success: function(response) {
+                    success: function (response) {
                         $('#deleteModal').modal('hide');
                         if (response.success) {
                             // Hiển thị thông báo thành công
@@ -154,7 +155,7 @@
                             });
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         $('#deleteModal').modal('hide');
                         // Hiển thị thông báo lỗi
                         Swal.fire({

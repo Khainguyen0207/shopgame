@@ -61,7 +61,11 @@ class UploadImageJob implements ShouldQueue
                     Log::channel('upload_image')->info('Upload file fail: ' . $secureUrl);
                 } else {
                     if ($type === 'thumb') {
-                        $this->account->thumb = $secureUrl;
+                        $this->account->thumb = [
+                            'url_image' => $secureUrl,
+                            'public_id' => $publicId,
+                            'type' => $type,
+                        ];
                         $this->account->save();
                     } else {
                         $imagePath[] = [
