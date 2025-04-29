@@ -24,6 +24,9 @@
                     <!-- Notification -->
                     <div class="card-body p-2">
                         <div class="alert alert-notication-custom alert-dismissible fade show" role="alert">
+                            <div class="content-empty">
+                                <p>Xin chào admin! </p>
+                            </div>
                             @if (count($pendingServices) > 0 || count($pendingWithdrawals) > 0 || count($pendingResourceWithdrawals) > 0)
                                 <br>
                                 <span class="text-danger">Bạn có
