@@ -19,6 +19,11 @@ class GameAccount extends Model
         'images'
     ];
 
+    protected $casts = [
+        'images.*' => 'array',
+        'images' => 'array'
+    ];
+
     public function category()
     {
         return $this->belongsTo(GameCategory::class, 'game_category_id');

@@ -25,7 +25,7 @@ class GameAccountController extends Controller
         $account = GameAccount::findOrFail($id);
 
         // Convert JSON string to array or provide empty array if null
-        $images = json_decode($account->images) ?? [];
+        $images = $account->images ?? [];
 
         return view("user.account.detail", compact('account', 'images'));
     }

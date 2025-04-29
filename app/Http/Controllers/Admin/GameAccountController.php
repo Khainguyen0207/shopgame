@@ -1,14 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\GameAccountRequest;
+use App\Jobs\UploadImageJob;
 use App\Models\GameAccount;
 use App\Models\GameCategory;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Helpers\UploadHelper;
+use App\Services\UploadCloudinaryService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class GameAccountController extends Controller
 {
@@ -28,31 +32,24 @@ class GameAccountController extends Controller
         return view('admin.accounts.create', compact('title', 'categories'));
     }
 
-    public function store(Request $request)
+    public function store(GameAccountRequest $request)
     {
-        try {
-            $request->validate([
-                'game_category_id' => 'required|exists:game_categories,id',
-                'username' => 'required|string|max:255',
-                'password' => 'required|string|max:255',
-                'price' => 'required|numeric|min:0',
-                'registration_type' => 'required|in:TTX,TTT',
-                'note' => 'nullable|string',
-                'thumb' => 'required|image|mimes:jpeg,png,jpg,gif',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-                'status' => 'required|in:available,sold'
-            ]);
+        $request->validate(
+            [
+                'thumb' => 'required',
+                'images' => 'required'
+            ]
+        );
 
+        try {
             DB::beginTransaction();
 
             $data = $request->except(['thumb', 'images']);
 
-            // Store thumbnail
             if ($request->hasFile('thumb')) {
                 $data['thumb'] = UploadHelper::upload($request->file('thumb'), self::UPLOAD_DIR . '/thumbnails');
             }
 
-            // Store multiple images
             if ($request->hasFile('images')) {
                 $imagePaths = [];
                 foreach ($request->file('images') as $image) {
@@ -70,6 +67,7 @@ class GameAccountController extends Controller
                 ->with('success', 'Tài khoản game đã được tạo thành công.');
         } catch (\Exception $e) {
             DB::rollBack();
+
             Log::error('Error creating game account: ' . $e->getMessage());
 
             return redirect()->back()
@@ -85,48 +83,68 @@ class GameAccountController extends Controller
         return view('admin.accounts.edit', compact('title', 'account', 'categories'));
     }
 
-    public function update(Request $request, GameAccount $account)
+    public function update(GameAccountRequest $request, GameAccount $account)
     {
         try {
-            $request->validate([
-                'game_category_id' => 'required|exists:game_categories,id',
-                'username' => 'required|string|max:255',
-                'password' => 'required|string|max:255',
-                'price' => 'required|numeric|min:0',
-                'registration_type' => 'required|in:TTX,TTT',
-                'note' => 'nullable|string',
-                'thumb' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif'
-            ]);
-
             DB::beginTransaction();
-
             $data = $request->except(['thumb', 'images']);
+            $uploadCloudinaryService = new UploadCloudinaryService();
 
             if ($request->hasFile('thumb')) {
-                // Delete old thumbnail
                 if ($account->thumb) {
-                    UploadHelper::deleteByUrl($account->thumb);
+                    $publicId = Str::between($account->thumb, 'firefoxgame/', '.');
+
+                    if (Storage::exists($account->thumb)) {
+                        Storage::delete($account->thumb);
+                    } else {
+                        $uploadCloudinaryService->deleteAssetsByFolder([$publicId]);
+                    }
                 }
-                $data['thumb'] = UploadHelper::upload($request->file('thumb'), self::UPLOAD_DIR . '/thumbnails');
+                $publicId = Str::random(20);
+                $url = array([
+                    'url_image' => $request->thumb->store('public/images'),
+                    'public_id' => $publicId,
+                    'type' => 'thumb',
+                ]);
+                $data['thumb'] = $publicId;
+                $uploadCloudinaryService->upload($url, $account);
             }
 
             if ($request->hasFile('images')) {
-                // Delete old images
                 if ($account->images) {
                     $oldImages = json_decode($account->images, true);
+                    $publicIds = [];
+
                     foreach ($oldImages as $image) {
-                        UploadHelper::deleteByUrl($image);
+                        if (Storage::exists($image['url_image'])) {
+                            Storage::delete($image['url_image']);
+                            continue;
+                        }
+
+                        $publicId = Str::between($image['url_image'], 'firefoxgame/', '.');
+                        $publicIds[] = $publicId;
                     }
+
+                    $uploadCloudinaryService->deleteAssetsByFolder($publicIds);
                 }
 
                 // Store new images
                 $imagePaths = [];
+
                 foreach ($request->file('images') as $image) {
-                    $path = UploadHelper::upload($image, self::UPLOAD_DIR . '/images');
-                    $imagePaths[] = $path;
+                    $publicId = Str::random(20);
+                    $url = [
+                        'url_image' => $image->store('public/images'),
+                        'public_id' => $publicId,
+                        'type' => 'images',
+                    ];
+
+                    $imagePaths[] = $url;
                 }
-                $data['images'] = json_encode($imagePaths);
+
+                $uploadCloudinaryService->upload($imagePaths, $account);
+
+                $data['images'] = json_encode($imagePaths, true);
             }
 
             $account->update($data);

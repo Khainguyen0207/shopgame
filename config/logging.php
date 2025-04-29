@@ -126,6 +126,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'upload_image' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/upload-image.log'),
+            'level' => 'info',
+        ],
     ],
 
 ];
