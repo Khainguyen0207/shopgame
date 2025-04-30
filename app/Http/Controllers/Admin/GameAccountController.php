@@ -22,6 +22,7 @@ class GameAccountController extends Controller
     {
         $title = 'Danh sách tài khoản game';
         $accounts = GameAccount::with(['category', 'buyer'])->orderBy('id', "DESC")->get();
+        dd($accounts, $accounts->first()->images, $accounts->first()->thumb);
         return view('admin.accounts.index', compact('title', 'accounts'));
     }
 
