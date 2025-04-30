@@ -58,7 +58,7 @@
                                 class="text-danger">#{{ $account->id }}</span>
                     </h2>
                     <div class="detail__images-list">
-                        @foreach (json_decode($images, true) as $image)
+                        @foreach ($images as $image)
                             @php
                                 $image['url_image'] = \Illuminate\Support\Facades\Storage::exists($image['url_image']) ? \Illuminate\Support\Facades\Storage::url($image['url_image']) : $image['url_image']
                             @endphp
