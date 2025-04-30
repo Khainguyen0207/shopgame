@@ -60,7 +60,7 @@
                     <div class="detail__images-list">
                         @foreach ($images as $image)
                             @php
-                                $image['url_image'] = \Illuminate\Support\Facades\Storage::exists($image['url_image']) ? \Illuminate\Support\Facades\Storage::url($image['url_image']) : $image['url_image']
+                                $image['url_image'] = Storage::exists($image['url_image']) ? Storage::url($image['url_image']) : $image['url_image']
                             @endphp
                             <a href="{{ Arr::get($image, 'url_image') }}" title="Xem ảnh lớn"
                                class="detail__images-link">
