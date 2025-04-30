@@ -75,6 +75,7 @@ class GameAccountController extends Controller
     {
         $title = 'Chỉnh sửa tài khoản game';
         $categories = GameCategory::where('active', true)->get();
+        dd($account->images, $account);
         return view('admin.accounts.edit', compact('title', 'account', 'categories'));
     }
 
