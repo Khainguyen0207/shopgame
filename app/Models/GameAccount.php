@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use JetBrains\PhpStorm\NoReturn;
 
 class GameAccount extends Model
 {
@@ -20,16 +22,16 @@ class GameAccount extends Model
     ];
 
     protected $casts = [
-        'images.*' => 'array',
-        'images' => 'array'
+        'images' => 'array',
+        'thumb' => 'array',
     ];
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(GameCategory::class, 'game_category_id');
     }
 
-    public function buyer()
+    public function buyer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'buyer_id');
     }

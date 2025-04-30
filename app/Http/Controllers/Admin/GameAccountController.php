@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\GameAccountTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\GameAccountRequest;
-use App\Jobs\UploadImageJob;
 use App\Models\GameAccount;
 use App\Models\GameCategory;
-use App\Helpers\UploadHelper;
 use App\Services\UploadCloudinaryService;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 
 class GameAccountController extends Controller
 {
-    private const UPLOAD_DIR = 'accounts';
+    private const UPLOAD_DIR = 'public/accounts/';
 
     public function index()
     {
@@ -44,45 +44,19 @@ class GameAccountController extends Controller
         try {
             DB::beginTransaction();
 
-            $data = $request->except(['thumb', 'images']);
             $uploadCloudinaryService = new UploadCloudinaryService();
 
-            $imagePaths = [];
-            $urlThumb = [];
+            $data = $request->except(['thumb', 'images']);
 
-            if ($request->hasFile('thumb')) {
-                $publicId = Str::random(20);
-                $urlThumb = [
-                    'url_image' => $request->thumb->store('public/images'),
-                    'public_id' => $publicId,
-                    'type' => 'thumb',
-                ];
-                $data['thumb'] = json_encode($urlThumb, true);
-            }
-
-            if ($request->hasFile('images')) {
-
-                foreach ($request->file('images') as $image) {
-                    $publicId = Str::random(20);
-                    $url = [
-                        'url_image' => $image->store('public/images'),
-                        'public_id' => $publicId,
-                        'type' => 'images',
-                    ];
-
-                    $imagePaths[] = $url;
-                }
-
-
-                $data['images'] = json_encode($imagePaths, true);
-            }
+            $thumb = $data['thumb'] = $this->setFiles($request->file('thumb'), GameAccountTypeEnum::THUMBNAIL);
+            $images = $data['images'] = $this->setFiles($request->file('images'), GameAccountTypeEnum::IMAGES);
 
             $account = GameAccount::query()->create($data);
 
-            DB::commit();
+            $uploadCloudinaryService->upload($thumb, $account);
+            $uploadCloudinaryService->upload($images, $account);
 
-            $uploadCloudinaryService->upload($urlThumb, $account);
-            $uploadCloudinaryService->upload($imagePaths, $account);
+            DB::commit();
 
             return redirect()->route('admin.accounts.index')
                 ->with('success', 'Tài khoản game đã được tạo thành công.');
@@ -112,50 +86,29 @@ class GameAccountController extends Controller
             $uploadCloudinaryService = new UploadCloudinaryService();
 
             if ($request->hasFile('thumb')) {
-                if ($account->thumb) {
-                    $publicId = Str::between($account->thumb, 'firefoxgame/', '.');
 
-                    if (Storage::exists($account->thumb)) {
-                        Storage::delete($account->thumb);
-                    } else {
-                        $uploadCloudinaryService->deleteAssetsByFolder([$publicId]);
-                    }
-                }
+                $this->deleteThumbnailGameAccount($account);
+
                 $publicId = Str::random(20);
                 $url = [
-                    'url_image' => $request->thumb->store('public/images'),
+                    'url_image' => $request->thumb->store(self::UPLOAD_DIR . 'thumbnails'),
                     'public_id' => $publicId,
                     'type' => 'thumb',
                 ];
                 $data['thumb'] = $url;
-                $uploadCloudinaryService->upload($url, $account);
+                $uploadCloudinaryService->upload([$url], $account);
             }
 
             if ($request->hasFile('images')) {
-                if ($account->images) {
-                    $oldImages = json_decode($account->images, true);
-                    $publicIds = [];
 
-                    foreach ($oldImages as $image) {
-                        if (Storage::exists($image['url_image'])) {
-                            Storage::delete($image['url_image']);
-                            continue;
-                        }
+                $this->deleteImagesGameAccount($account);
 
-                        $publicId = Str::between($image['url_image'], 'firefoxgame/', '.');
-                        $publicIds[] = $publicId;
-                    }
-
-                    $uploadCloudinaryService->deleteAssetsByFolder($publicIds);
-                }
-
-                // Store new images
                 $imagePaths = [];
 
                 foreach ($request->file('images') as $image) {
                     $publicId = Str::random(20);
                     $url = [
-                        'url_image' => $image->store('public/images'),
+                        'url_image' => $image->store(self::UPLOAD_DIR . 'images'),
                         'public_id' => $publicId,
                         'type' => 'images',
                     ];
@@ -165,7 +118,7 @@ class GameAccountController extends Controller
 
                 $uploadCloudinaryService->upload($imagePaths, $account);
 
-                $data['images'] = json_encode($imagePaths, true);
+                $data['images'] = $imagePaths;
             }
 
             $account->update($data);
@@ -188,39 +141,9 @@ class GameAccountController extends Controller
         try {
             DB::beginTransaction();
 
-            $uploadCloudinaryService = new UploadCloudinaryService();
-            // Delete thumbnail if exists
-            if ($account->thumb) {
-                $publicId = Str::between($account->thumb, 'firefoxgame/', '.');
+            $this->deleteImagesGameAccount($account);
+            $this->deleteThumbnailGameAccount($account);
 
-                if (Storage::exists($account->thumb)) {
-                    Storage::delete($account->thumb);
-                } else {
-                    $uploadCloudinaryService->deleteAssetsByFolder([$publicId]);
-                }
-            }
-
-            // Delete additional images if exists
-            if ($account->images) {
-                $oldImages = json_decode($account->images, true);
-                $publicIds = [];
-
-                foreach ($oldImages as $image) {
-                    if (Storage::exists($image['url_image'])) {
-                        Storage::delete($image['url_image']);
-                        continue;
-                    }
-
-                    $publicId = Str::between($image['url_image'], 'firefoxgame/', '.');
-                    $publicIds[] = $publicId;
-                }
-
-                if (count($publicIds) > 0) {
-                    $uploadCloudinaryService->deleteAssetsByFolder($publicIds);
-                }
-            }
-
-            // Delete the account record
             $account->delete();
             DB::commit();
 
@@ -232,6 +155,81 @@ class GameAccountController extends Controller
                 'success' => false,
                 'message' => 'Có lỗi xảy ra khi xóa tài khoản game: ' . $e->getMessage()
             ]);
+        }
+    }
+
+    public function setFiles(UploadedFile|array $files, string $type): ?array
+    {
+        if (in_array($type, GameAccountTypeEnum::cases())) {
+            return null;
+        }
+
+        if ($type === GameAccountTypeEnum::THUMBNAIL) {
+            $publicId = Str::random(20);
+
+            return [
+                'url_image' => $files->store(self::UPLOAD_DIR . 'thumbnails'),
+                'public_id' => $publicId,
+                'type' => GameAccountTypeEnum::THUMBNAIL,
+            ];
+        }
+
+        if ($type === GameAccountTypeEnum::IMAGES) {
+            $imagePaths = [];
+
+            foreach ($files as $image) {
+                $publicId = Str::random(20);
+                $url = [
+                    'url_image' => $image->store(self::UPLOAD_DIR . 'images'),
+                    'public_id' => $publicId,
+                    'type' => GameAccountTypeEnum::IMAGES,
+                ];
+
+                $imagePaths[] = $url;
+            }
+
+            return $imagePaths;
+        }
+
+        return null;
+    }
+
+    public function deleteThumbnailGameAccount(GameAccount $account)
+    {
+        $uploadCloudinaryService = new UploadCloudinaryService();
+
+        if ($thumb = $account->thumb) {
+            $url_image = $thumb['url_image'];
+
+            if (Storage::exists($url_image)) {
+                Storage::delete($url_image);
+            } else {
+                $publicId = Str::between($url_image, 'firefoxgame/', '.');
+                $uploadCloudinaryService->deleteAssetsByFolder([$publicId]);
+            }
+        }
+
+    }
+
+    public function deleteImagesGameAccount(GameAccount $account)
+    {
+        $uploadCloudinaryService = new UploadCloudinaryService();
+
+        if (($images = $account->images) && (is_array($images))) {
+            $publicIds = [];
+            foreach ($images as $image) {
+                $url_image = $image['url_image'];
+                if (Storage::exists($url_image)) {
+                    Storage::delete($url_image);
+                } else {
+                    $publicId = Str::between($url_image, 'firefoxgame/', '.');
+                    $publicIds[] = $publicId;
+                }
+            }
+
+            if (count($publicIds) > 0) {
+                $uploadCloudinaryService->deleteAssetsByFolder($publicIds);
+            }
         }
     }
 }

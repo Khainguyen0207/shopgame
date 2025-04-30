@@ -34,6 +34,7 @@ class UploadImageJob implements ShouldQueue
             Log::channel('upload_image')->info('Upload file');
 
             $imagePath = [];
+
             foreach ($this->images as $valueImage) {
                 $urlImage = $valueImage['url_image'];
                 $publicId = $valueImage['public_id'];
@@ -80,7 +81,7 @@ class UploadImageJob implements ShouldQueue
                 }
             }
 
-            $this->account->images = json_encode($imagePath, true);
+            $this->account->images = $imagePath;
             $this->account->save();
 
         } catch (\Exception $e) {
