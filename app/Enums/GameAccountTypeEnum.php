@@ -8,6 +8,4 @@ enum GameAccountTypeEnum: string
 {
     const THUMBNAIL = 'thumbnail';
     const IMAGES = 'images';
-
-
 }
