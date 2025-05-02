@@ -59,7 +59,7 @@ class CardDepositController extends Controller
             $request_id = rand(111111111111, 9999999999999);
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json'
-            ])->post("https://$partnerWeb/charging/v2", [
+            ])->post("https://$partnerWeb/chargingws/v2", [
                 'telco' => $request->telco,
                 'code' => $request->pin,
                 'serial' => $request->serial,
