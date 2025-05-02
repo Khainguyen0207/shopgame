@@ -25,7 +25,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('config-helper', function () {
             return new ConfigHelper();
         });
-
         //
         Paginator::defaultView('vendor.pagination.default');
 
