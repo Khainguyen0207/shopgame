@@ -17,7 +17,7 @@ class ConfigHelper
     public static function get($key, $default = null)
     {
         $cacheKey = 'config_' . $key;
-
+dd(1);
         // Kiểm tra cache trước
         if (Cache::has($cacheKey)) {
             return Cache::get($cacheKey);

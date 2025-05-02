@@ -1,11 +1,3 @@
-{{-- /**
-* Copyright (c) 2025 FPT University
-*
-* @author Phạm Hoàng Tuấn
-* @email phamhoangtuanqn@gmail.com
-* @facebook fb.com/phamhoangtuanqn
-*/ --}}
-
 @extends('layouts.user.app')
 
 @section('title', 'Đăng nhập')
@@ -32,7 +24,7 @@
                 <form method="POST" action="{{ route('login') }}" class="register-form">
                     @csrf
                     <div class="form-group">
-                        <label for="username" class="form-label">Tên tài khoản hoặc Email</label>
+                        <label for="username" class="form-label">Email</label>
                         <input id="username" type="text" class="form-input @error('username') is-invalid @enderror"
                             name="username" value="{{ old('username') }}" required autofocus>
                         @error('username')
@@ -64,6 +56,7 @@
                     </button>
 
                     @if (config_get('login_social.google.active', false) || config_get('login_social.facebook.active', false))
+
                         <div class="social-login">
                             <p class="social-login-text">Hoặc đăng nhập bằng</p>
                             <div class="social-login-buttons">
@@ -71,12 +64,6 @@
                                     <a href="{{ route('auth.google') }}" class="google-login-btn">
                                         <i class="fab fa-google"></i>
                                         <span>Google</span>
-                                    </a>
-                                @endif
-                                @if (config_get('login_social.facebook.active', false))
-                                    <a href="{{ route('auth.facebook') }}" class="facebook-login-btn">
-                                        <i class="fab fa-facebook-f"></i>
-                                        <span>Facebook</span>
                                     </a>
                                 @endif
                             </div>
@@ -99,3 +86,4 @@
         </div>
     </section>
 @endsection
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0&appId=634116526234000"></script>

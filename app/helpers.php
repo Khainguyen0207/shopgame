@@ -90,10 +90,10 @@ if (!function_exists('config_get')) {
      * Lấy giá trị cấu hình theo khóa
      *
      * @param string $key
-     * @param mixed $default
+     * @param mixed|null $default
      * @return mixed
      */
-    function config_get($key, $default = null)
+    function config_get(string $key, mixed $default = null): mixed
     {
         $cacheKey = 'config_' . $key;
 

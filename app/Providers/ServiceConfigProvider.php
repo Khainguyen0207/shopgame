@@ -1,29 +1,28 @@
 <?php
+
 namespace App\Providers;
 
 use App\Models\Config;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
-use App\Models\ServiceSetting;
 
 class ServiceConfigProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         $this->loadServiceSettings();
     }
 
-    protected function loadServiceSettings()
+    protected function loadServiceSettings(): void
     {
-        // Load service settings from the configuration
-        if (!empty(config('service.settings'))) {
+        if (empty(config('service.settings'))) {
             // Sử dụng cache để tránh truy vấn DB nhiều lần
             $settings = Cache::remember('service_settings', 3600, function () {
                 return Config::all()->groupBy('provider')->map(function ($items) {
                     return $items->pluck('value', 'key')->all();
                 })->all();
             });
-
+            $settings = $settings[''];
             // Cập nhật cấu hình cho Google
             if (isset($settings['login_social.google.active'])) {
                 config([

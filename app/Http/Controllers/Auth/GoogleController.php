@@ -26,7 +26,7 @@ class GoogleController extends Controller
     /**
      * Obtain the user information from Google.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function handleGoogleCallback()
     {
@@ -56,14 +56,13 @@ class GoogleController extends Controller
                     $counter++;
                 }
 
-                // Create a new user
+                // Create a new userđ
                 $newUser = User::create([
-                    'username' => $username,
+                    'username' => $googleUser->name,
                     'email' => $googleUser->email,
                     'google_id' => $googleUser->id,
                     'password' => Hash::make(Str::random(16)),
                     'email_verified_at' => now(),
-                    'avatar' => $googleUser->avatar,
                     'balance' => 0
                 ]);
 
