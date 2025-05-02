@@ -109,7 +109,7 @@
                         <div class="account-actions">
                             <div class="action-btn ">
                                 <i class="fas fa-credit-card"></i>
-                                {{ number_format($account->price / ((100 - config_get('payment.card.discount_percent')) / 100)) }}
+                                {{ number_format($account->price) }}
                                 Đ
                             </div>
                             <a href="{{ route('account.show', ['id' => $account->id]) }}"
