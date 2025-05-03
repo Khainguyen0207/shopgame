@@ -1,11 +1,4 @@
 <?php
-/**
- * Copyright (c) 2025 FPT University
- *
- * @autor    Phạm Hoàng Tuấn
- * @email     phamhoangtuanqn@gmail.com
- * @facebook  fb.com/phamhoangtuanqn
- */
 
 namespace App\Http\Controllers\Admin;
 

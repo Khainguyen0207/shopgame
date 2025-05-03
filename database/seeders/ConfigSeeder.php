@@ -1,11 +1,4 @@
 <?php
-/**
- * Copyright (c) 2025 FPT University
- *
- * @author    Phạm Hoàng Tuấn
- * @email     phamhoangtuanqn@gmail.com
- * @facebook  fb.com/phamhoangtuanqn
- */
 
 namespace Database\Seeders;
 
@@ -20,10 +13,10 @@ class ConfigSeeder extends Seeder
     public function run(): void
     {
         // Define base values to avoid duplication
-        $siteName = 'TUANORI.VN - Shop Game Ngọc Rồng';
-        $siteDescription = 'Shop Ngọc Rồng Online cung cấp tài khoản game chính hãng, giá tốt nhất thị trường. Giao dịch an toàn, nhanh chóng và bảo mật';
-        $contactEmail = 'support@tuanori.vn';
-        $contactPhone = '0812665001';
+        $siteName = '';
+        $siteDescription = '';
+        $contactEmail = '';
+        $contactPhone = '';
 
         $configs = [
             // General settings
@@ -41,9 +34,9 @@ class ConfigSeeder extends Seeder
             'email' => $contactEmail,
 
             // Social media settings
-            'facebook' => 'https://facebook.com/tuanori.vn',
+            'facebook' => '/',
             'zalo' => $contactPhone, // Reusing phone number for Zalo
-            'youtube' => 'https://www.youtube.com/@htuanqn',
+            'youtube' => '/',
             'discord' => 'https://discord.gg/example',
             'telegram' => 'https://t.me/example',
             'tiktok' => 'https://tiktok.com/@example',

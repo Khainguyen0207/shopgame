@@ -40,11 +40,7 @@
                             href="https://sepay.vn/?utm_source=INV&utm_medium=RFTRA&utm_campaign=1B420439"
                             target="_blank">SePay.VN</a></b>
                     <hr>
-                    Nếu bạn muốn tích hợp qua website khác mà không phải
-                    SePay, hãy liên hệ với nhà cung cấp qua Zalo <a href="https://zalo.me/0812665001" class="a_link"
-                        target="_blank">0812665001</a> hoặc Fanpage <a href="https://www.facebook.com/tuanori.vn"
-                        class="a_link" target="_blank">TUAN ORI - Web Designer MMO</a> để nhận được sự hỗ trợ.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
                 </div>
                 <div class="alert alert-notication-custom alert-dismissible fade show" role="alert">
                     <strong>Hướng dẫn lấy Access Token:</strong> Vui lòng xem video hướng dẫn chi tiết tại <a

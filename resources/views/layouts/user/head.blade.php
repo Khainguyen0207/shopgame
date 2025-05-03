@@ -1,10 +1,3 @@
-{{-- /**
-* Copyright (c) 2025 FPT University
-*
-* @author Phạm Hoàng Tuấn
-* @email phamhoangtuanqn@gmail.com
-* @facebook fb.com/phamhoangtuanqn
-*/ --}}
 
 <head>
     <meta charset="UTF-8" />

@@ -1,11 +1,5 @@
 <?php
-/**
- * Copyright (c) 2025 FPT University
- *
- * @author    Phạm Hoàng Tuấn
- * @email     phamhoangtuanqn@gmail.com
- * @facebook  fb.com/phamhoangtuanqn
- */
+
 
 namespace App\Http\Controllers\Admin;
 
@@ -36,9 +30,9 @@ class ConfigController extends Controller
 
         // Lấy tất cả cấu hình chung
         $configs = [
-            'site_name' => config_get('site_name', 'Shop Game Ngọc Rồng - THIẾT KẾ BỞI TUANORI.VN'),
-            'site_description' => config_get('site_description', 'Mua bán tài khoản game Ngọc Rồng'),
-            'site_keywords' => config_get('site_keywords', 'Mua bán tài khoản game Ngọc Rồng'),
+            'site_name' => config_get('site_name', ''),
+            'site_description' => config_get('site_description', ''),
+            'site_keywords' => config_get('site_keywords', ''),
             'site_logo' => config_get('site_logo'),
             'site_logo_footer' => config_get('site_logo_footer'),
             'site_share_image' => config_get('site_share_image'),
