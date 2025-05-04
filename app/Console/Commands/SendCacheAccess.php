@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Telegram\Bot\Api;
+use Telegram\Bot\FileUpload\InputFile;
 
 class SendCacheAccess extends Command
 {
@@ -28,8 +29,6 @@ class SendCacheAccess extends Command
         $filePath = 'data.json';
         Storage::put($filePath, json_encode($accessData, JSON_PRETTY_PRINT));
 
-        $fileContent = Storage::get($filePath);
-
         if ($accessData) {
             $telegram = new Api(config('services.telegram.bot_token'));
 
@@ -37,13 +36,19 @@ class SendCacheAccess extends Command
 
             $telegram->sendMessage([
                 'chat_id' => config('services.telegram.chat_id'),
-                'text' => $number ."\n". "<pre>" . htmlspecialchars($fileContent) . "</pre>",
+                'text' => $number,
                 'parse_mode' => 'HTML',
+            ]);
+
+            $inputFile = InputFile::create(Storage::path($filePath), $filePath);
+
+            $telegram->sendDocument([
+                'chat_id' => config('services.telegram.chat_id'),
+                'document' => $inputFile,
             ]);
 
             Cache::forget('access');
             Storage::delete($filePath);
-
 
             $this->info('Cache access đã được gửi và xóa.');
         } else {
