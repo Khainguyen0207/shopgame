@@ -42,6 +42,8 @@ class SendCacheAccess extends Command
             ]);
 
             Cache::forget('access');
+            Storage::delete($filePath);
+
 
             $this->info('Cache access đã được gửi và xóa.');
         } else {
