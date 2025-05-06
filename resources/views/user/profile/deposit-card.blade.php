@@ -96,7 +96,7 @@
 
                                     <div class="form-group">
                                         <label for="serial" class="form-label">
-                                            <i class="fa-solid fa-barcode me-2"></i> Mã thẻ
+                                            <i class="fa-solid fa-key me-2"></i> Số serial
                                         </label>
                                         <input type="text" class="form-control @error('serial') is-invalid @enderror"
                                             id="serial" name="serial" value="{{ old('serial') }}" required>
@@ -108,8 +108,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="pin" class="form-label">
-                                            <i class="fa-solid fa-key me-2"></i> Số serial
+                                        <label for="pin" class="form-label">Mã thẻ
+                                            <i class="fa-solid fa-barcode me-2"></i>
                                         </label>
                                         <input type="text" class="form-control @error('pin') is-invalid @enderror"
                                             id="pin" name="pin" value="{{ old('pin') }}" required>
