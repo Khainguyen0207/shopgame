@@ -109,7 +109,7 @@
 
                                     <div class="form-group">
                                         <label for="pin" class="form-label">
-                                            <i class="fa-solid fa-key me-2"></i> Mã PIN
+                                            <i class="fa-solid fa-key me-2"></i> Số serial
                                         </label>
                                         <input type="text" class="form-control @error('pin') is-invalid @enderror"
                                             id="pin" name="pin" value="{{ old('pin') }}" required>

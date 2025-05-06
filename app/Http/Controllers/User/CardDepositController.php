@@ -4,10 +4,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\CardDeposit;
 use App\Models\MoneyTransaction;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -143,7 +143,7 @@ class CardDepositController extends Controller
         }
 
         // Kiểm tra thẻ đã được xử lý chưa
-        if ($cardDeposit->status != 'processing') {
+        if ($cardDeposit->status !== 'processing') {
             return response()->json(['message' => 'Thẻ này đã được xử lý từ trước.'], 200);
         }
 
