@@ -78,9 +78,9 @@
     <div class="container">
         <div class="header">
             @if (config_get('site_logo'))
-                <img src="{{ config_get('site_logo') }}" alt="{{ config_get('site_name') }}" class="logo">
+                <img src="{{ url(config_get('site_logo')) }}" alt="{{ config_get('site_name') }}" class="logo">
             @endif
-            <h2>Đặt lại mật khẩu</h2>
+            <h2>Đặt lại mật khẩu - {{ config('app.name') }}</h2>
         </div>
         <div class="content">
             <p>Xin chào {{ $notifiable->username ?? 'Quý khách' }}!</p>
