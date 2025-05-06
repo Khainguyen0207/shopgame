@@ -154,6 +154,12 @@
                                 @endif
                                 <div id="preview-images" class="d-flex flex-wrap justify-content-center gap-3 mb-3">
                                     @if ($images = $account->images)
+                                        @php
+                                            if (is_string($images)) {
+                                                $images = json_decode($images, true);
+                                            }
+                                        @endphp
+
                                         @foreach ($images as $image)
                                             @php
                                                 $image['url_image'] = Storage::exists($image['url_image']) ? Storage::url($image['url_image']) : $image['url_image'];

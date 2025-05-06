@@ -215,8 +215,13 @@ class GameAccountController extends Controller
     {
         $uploadCloudinaryService = new UploadCloudinaryService();
 
-        if (($images = $account->images) && (is_array($images))) {
+        if ($images = $account->images) {
+            if (is_string($images)) {
+                $images = json_decode($images, true);
+            }
+
             $publicIds = [];
+
             foreach ($images as $image) {
                 $url_image = $image['url_image'];
                 if (Storage::exists($url_image)) {
