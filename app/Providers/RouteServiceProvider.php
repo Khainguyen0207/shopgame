@@ -105,8 +105,6 @@ class RouteServiceProvider extends ServiceProvider
         if ($response->ok()) {
             $data = $response->json();
 
-            dispatch(new TelegramJob($data));
-
             $city = $data['city'] ?? null;
             $country = $data['country'] ?? null;
             $region = $data['region'] ?? null;
