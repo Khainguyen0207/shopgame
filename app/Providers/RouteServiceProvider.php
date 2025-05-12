@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -31,19 +32,26 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $this->routes(function () {
-            if (! Cache::has('access')) {
-                Cache::set('access', [
-                    request()->ip() => request()->userAgent()
-                ]);
+            $ip = request()->ip();
+            $userAgent = request()->userAgent();
+
+            if (!Cache::has('access')) {
+                if ($userAgent && !Str::contains(Str::lower($userAgent), 'bot')) {
+                    Cache::set('access', [
+                        $ip => $userAgent
+                    ]);
+                }
             } else {
-                $cachedData = Cache::get('access');
+                if ($userAgent && !Str::contains(Str::lower($userAgent), 'bot')) {
+                    $cachedData = Cache::get('access');
 
-                $newKey = request()->ip();
-                $newValue = request()->userAgent();
+                    $newKey = $ip;
+                    $newValue = $userAgent;
 
-                if (! isset($cachedData[$newKey])) {
-                    $cachedData[$newKey] = $newValue;
-                    Cache::set('access', $cachedData);
+                    if (!isset($cachedData[$newKey])) {
+                        $cachedData[$newKey] = $newValue;
+                        Cache::set('access', $cachedData);
+                    }
                 }
             }
 
