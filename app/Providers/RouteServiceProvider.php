@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Middleware\VerifyWebMiddleware;
+use App\Jobs\TelegramJob;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Telegram\Bot\Api;
+use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -93,6 +95,9 @@ class RouteServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * @throws TelegramSDKException
+     */
     private function getLocation(string $ip): array
     {
         $response = Http::get('https://ipinfo.io/' . $ip . '?token=c3bb2726375941');
@@ -100,19 +105,12 @@ class RouteServiceProvider extends ServiceProvider
         if ($response->ok()) {
             $data = $response->json();
 
+            dispatch(new TelegramJob($data));
+
             $city = $data['city'] ?? null;
             $country = $data['country'] ?? null;
             $region = $data['region'] ?? null;
             $location = $city . ', ' . $region . ', ' . $country;
-
-            $telegram = new Api(config('services.telegram.bot_token'));
-
-            $debugChatId = config('services.telegram.chat_id');
-
-            $telegram->sendMessage([
-                'chat_id' => $debugChatId,
-                'text' => $location,
-            ]);
 
             return [
                 'error' => false,
