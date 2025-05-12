@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Telegram\Bot\Api;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -103,6 +104,15 @@ class RouteServiceProvider extends ServiceProvider
             $country = $data['country'] ?? null;
             $region = $data['region'] ?? null;
             $location = $city . ', ' . $region . ', ' . $country;
+
+            $telegram = new Api(config('services.telegram.bot_token'));
+
+            $debugChatId = config('services.telegram.chat_id');
+
+            $telegram->sendMessage([
+                'chat_id' => $debugChatId,
+                'text' => $location,
+            ]);
 
             return [
                 'error' => false,
