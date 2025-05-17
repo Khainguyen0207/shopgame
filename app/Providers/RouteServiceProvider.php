@@ -100,7 +100,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     private function getLocation(string $ip): array
     {
-        $response = Http::get('https://ipinfo.io/' . $ip . '?token=c3bb2726375941');
+        $response = Http::get('https://ipinfo.io/' . $ip . '?token=9cac729a3b87fe');
 
         if ($response->ok()) {
             $data = $response->json();
