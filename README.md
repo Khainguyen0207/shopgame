@@ -12,7 +12,8 @@ Link web demo:
 2. Ngoài ra còn giúp gửi các file tiện ích quản lý hằng ngày.
 
 *Ảnh minh họa*
-<img src="public/assets/images/demo/image.png" alt="bot-telegram>
+
+<img src="./public/assets/images/demo/image.png" alt="bot-telegram">
 
 **Authentication: Đăng nhập, đăng ký, quên mật khẩu**
 
@@ -38,5 +39,5 @@ Khi người dùng quét mã QR tại trang profile và thanh toán thành công
 
 *Ảnh minh họa*
 
-<img src="public/assets/images/demo/banking.png" alt="banking">
-<img src="public/assets/images/demo/confirm_banking.png" alt="confirm_banking">
+<img src="./public/assets/images/demo/banking.png" alt="banking">
+<img src="./public/assets/images/demo/confirm_banking.png" alt="confirm_banking">
