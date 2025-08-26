@@ -13,7 +13,7 @@ Link web demo:
 
 *Ảnh minh họa*
 
-<img src="./public/assets/images/demo/image.png" alt="bot-telegram" style="max-width: 200px;">
+<img src="./public/assets/images/demo/image.png" alt="bot-telegram" width="200">
 
 **Authentication: Đăng nhập, đăng ký, quên mật khẩu**
 
@@ -40,11 +40,11 @@ Khi người dùng quét mã QR tại trang profile và thanh toán thành công
 *Ảnh minh họa*
 
 <img src="./public/assets/images/demo/banking.png" alt="banking">
-<img src="./public/assets/images/demo/confirm_banking.png" alt="confirm_banking" style="max-width: 190px;">
+<img src="./public/assets/images/demo/confirm_banking.png" alt="confirm_banking" width="190">
 
 
 #### Tích hợp thông báo thanh toán Sepay
 *Ảnh minh họa*
 - Sau khi thanh toán thành công sẽ bắn tới telegram thông báo biến động số dư tại web ngoài ra còn thông báo tới bot nội bộ có giao dịch mới trên website.
 
-<img src="./public/assets/images/demo/paymentSuccess.png" alt="confirm_banking" style="max-width: 200px;">
+<img src="./public/assets/images/demo/paymentSuccess.png" alt="confirm_banking" width="200">
