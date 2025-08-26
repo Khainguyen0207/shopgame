@@ -9,7 +9,7 @@
             <a href="{{ route('profile.deposit-card') }}"
                 class="text menu__item {{ request()->routeIs('profile.deposit-card') ? 'active' : '' }}">Nạp tiền</a>
             <a href="{{ route('service.show-all') }}"
-                class="text menu__item {{ request()->routeIs('service.*') ? 'active' : '' }}">Dịch vụ</a>
+                class="text menu__item {{ request()->routeIs('service.*') ? 'active' : '' }}">Tin tức</a>
 
             <a href="{{ route('category.show-all') }}"
                 class="text menu__item {{ request()->routeIs('category.*') ? 'active' : '' }}">Nick game</a>

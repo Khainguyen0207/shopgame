@@ -92,8 +92,7 @@
 }
 
 .account-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
     gap: 15px;
     margin-bottom: 15px;
 }
@@ -136,6 +135,10 @@
     justify-content: center;
     gap: 8px;
     padding: 5px;
+}
+
+div.action-btn {
+    border: 1px dashed red;
 }
 
 .action-btn i {

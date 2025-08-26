@@ -2,7 +2,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <meta name="robots" content="noindex, nofollow">
-    <title>@yield('title', 'Trang quản trị bởi Phạm Hoàng Tuấn')</title>
+    <title>@yield('title', 'Trang quản trị bởi Fog Developer')</title>
 
     <link rel="icon" type="image/png" href="https://i.postimg.cc/sg1tCBGL/favicon.png">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
