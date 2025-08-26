@@ -13,7 +13,7 @@ Link web demo:
 
 *Ảnh minh họa*
 
-<img src="./public/assets/images/demo/image.png" alt="bot-telegram" width="200">
+<img src="./public/assets/images/demo/image.png" alt="bot-telegram" width="500">
 
 **Authentication: Đăng nhập, đăng ký, quên mật khẩu**
 
@@ -47,4 +47,4 @@ Khi người dùng quét mã QR tại trang profile và thanh toán thành công
 *Ảnh minh họa*
 - Sau khi thanh toán thành công sẽ bắn tới telegram thông báo biến động số dư tại web ngoài ra còn thông báo tới bot nội bộ có giao dịch mới trên website.
 
-<img src="./public/assets/images/demo/paymentSuccess.png" alt="confirm_banking" width="200">
+<img src="./public/assets/images/demo/paymentSuccess.png" alt="confirm_banking" width="500">
