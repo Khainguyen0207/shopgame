@@ -12,8 +12,7 @@ Link web demo:
 2. Ngoài ra còn giúp gửi các file tiện ích quản lý hằng ngày.
 
 *Ảnh minh họa*
-
-![image.png](public/assets/images/demo/image.png)
+<img src="public/assets/images/demo/image.png" alt="bot-telegram>
 
 **Authentication: Đăng nhập, đăng ký, quên mật khẩu**
 
@@ -38,5 +37,6 @@ Setup thông qua admin panel.
 Khi người dùng quét mã QR tại trang profile và thanh toán thành công: Sepay sẽ bắn 1 webhook tới web → Web nhận response và trả về `success: true` `code:200` để xác nhận thành công, và truyền vào Jobs (Laravel) để thay đổi số tiền của người dùng thông qua ghi chú của người dùng mà admin đã setup sẵn.
 
 *Ảnh minh họa*
-![banking.png](public/assets/images/demo/banking.png)
-![confirm_banking.png](public/assets/images/demo/confirm_banking.png)
+
+<img src="public/assets/images/demo/banking.png" alt="banking">
+<img src="public/assets/images/demo/confirm_banking.png" alt="confirm_banking">
